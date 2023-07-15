@@ -36,6 +36,10 @@ function Home({ history }) {
                 <br />
                 <button onClick={handleSubmit}>Submit!</button>
             </> : <>
+                <button onClick={() => {
+                    setwInfo('')
+                    setZip('')
+                }}>New Search!</button>
                 <h1>{wInfo.name}</h1>
                 <h2>{wInfo.main.temp + 'F'} </h2>
             </>}
