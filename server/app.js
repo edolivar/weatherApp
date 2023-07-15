@@ -4,6 +4,7 @@ import cors from 'cors'
 import path from "path"
 import { dirname } from "path"
 import { fileURLToPath } from 'url';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename)
 
@@ -11,7 +12,7 @@ const __dirname = dirname(__filename)
 
 const app = express()
 
-app.use(express.json()).use(cors())
+app.use(express.json()).use(cors()).use(express.static(path.join(__dirname, 'dist')))
 
 const PORT = process.env.PORT || 8080
 

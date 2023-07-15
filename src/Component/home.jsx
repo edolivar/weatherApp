@@ -15,6 +15,9 @@ function Home({ history }) {
         }
         else {
             /* This WILL need to be changed eventually!*/
+            // const resp = await window.fetch(`http://localhost:8080/api/weatherInfo/?zip=${zipCode}`, {
+            //     method: 'GET'
+            // })
             const resp = await window.fetch(`https://weatherapp-miea.onrender.com/api/weatherInfo/?zip=${zipCode}`, {
                 method: 'GET'
             })
