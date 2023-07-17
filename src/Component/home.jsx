@@ -6,12 +6,14 @@ import { withRouter } from 'react-router-dom';
 function Home({ history }) {
     const [zipCode, setZip] = useState('')
     const [wInfo, setwInfo] = useState()
+    const [err, setErr] = useState(false)
+
     async function handleSubmit(event) {
         if (zipCode.length !== 5) {
-            throw new Error('A zip code should be 5 numbers long.')
+            setErr('A zip code should be 5 numbers long.')
         }
         else if (isNaN(zipCode)) {
-            throw new Error('Numbers Only!')
+            setErr('Numbers Only!')
         }
         else {
             /* This WILL need to be changed eventually!*/
@@ -34,6 +36,7 @@ function Home({ history }) {
                     setZip(event.target.value)
                 }} />
                 <br />
+                {err ? <p>{err}</p> : <></>}
                 <button onClick={handleSubmit}>Submit!</button>
             </> : <>
                 <button onClick={() => {
