@@ -3,6 +3,30 @@ import '../App.css'
 import { withRouter } from 'react-router-dom';
 
 
+function tempFunc(setwInfo, setErr) {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(success, error);
+    } else {
+        setErr("Geolocation not supported");
+    }
+
+    async function success(position) {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        // const resp = await window.fetch(`http://localhost:8080/api/weatherInfo/ll/?latitude=${latitude}&longitude=${longitude}`, {
+        //     method: 'GET'
+        // })
+        const resp = await window.fetch(`https://weatherapp-miea.onrender.com/api/weatherInfo/ll/?latitude=${latitude}&longitude=${longitude}`, {
+            method: 'GET'
+        })
+        setwInfo(await resp.json());
+    }
+
+    function error() {
+        setErr("Unable to retrieve your location");
+    }
+}
+
 function Home({ history }) {
     const [zipCode, setZip] = useState('')
     const [wInfo, setwInfo] = useState()
@@ -16,11 +40,11 @@ function Home({ history }) {
             setErr('Numbers Only!')
         }
         else {
-            /* This WILL need to be changed eventually!*/
-            // const resp = await window.fetch(`http://localhost:8080/api/weatherInfo/?zip=${zipCode}`, {
+            // This WILL need to be changed eventually!*/
+            // const resp = await window.fetch(`http://localhost:8080/api/weatherInfo/zipcode/?zip=${zipCode}`, {
             //     method: 'GET'
             // })
-            const resp = await window.fetch(`https://weatherapp-miea.onrender.com/api/weatherInfo/?zip=${zipCode}`, {
+            const resp = await window.fetch(`https://weatherapp-miea.onrender.com/api/weatherInfo/zipcode/?zip=${zipCode}`, {
                 method: 'GET'
             })
 
@@ -29,7 +53,9 @@ function Home({ history }) {
     }
     return (
         <>
+
             {!wInfo ? <>
+                <button onClick={() => { tempFunc(setwInfo, setErr) }}>Use Location Services!</button>
                 < div > Weather In Your Zip Code!</div >
                 <form action=""></form>
                 <input type="text" value={zipCode} onChange={(event) => {
@@ -42,6 +68,7 @@ function Home({ history }) {
                 <button onClick={() => {
                     setwInfo('')
                     setZip('')
+                    setErr('')
                 }}>New Search!</button>
                 <h1>{wInfo.name}</h1>
                 <h2>{wInfo.main.temp + 'F'} </h2>
