@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import '../App.css'
 import { withRouter } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
 
 
-function tempFunc(setwInfo, setErr) {
+function tempFunc(setwInfo) {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(success, error);
     } else {
-        setErr("Geolocation not supported");
+        toast.error("Geolocation not supported");
     }
 
     async function success(position) {
@@ -23,21 +24,21 @@ function tempFunc(setwInfo, setErr) {
     }
 
     function error() {
-        setErr("Unable to retrieve your location");
+        toast.error("Unable to retrieve your location");
     }
 }
 
 function Home({ history }) {
     const [zipCode, setZip] = useState('')
     const [wInfo, setwInfo] = useState()
-    const [err, setErr] = useState(false)
+
 
     async function handleSubmit(event) {
         if (zipCode.length !== 5) {
-            setErr('A zip code should be 5 numbers long.')
+            toast.error('A zip code should be 5 numbers long.')
         }
         else if (isNaN(zipCode)) {
-            setErr('Numbers Only!')
+            toast.error('Numbers Only!')
         }
         else {
             // This WILL need to be changed eventually!*/
@@ -53,17 +54,14 @@ function Home({ history }) {
     }
     return (
         <>
-
             {!wInfo ? <>
-                <button onClick={() => { tempFunc(setwInfo, setErr) }}>Use Location Services!</button>
+                <button onClick={() => { tempFunc(setwInfo) }}>Use Location Services!</button>
                 <p>OR</p>
                 < div > Weather In Your Zip Code!</div >
-                <form action=""></form>
                 <input type="text" value={zipCode} onChange={(event) => {
                     setZip(event.target.value)
                 }} />
                 <br />
-                {err ? <p>{err}</p> : <></>}
                 <button onClick={handleSubmit}>Submit!</button>
             </> : <>
                 <button onClick={() => {
@@ -74,6 +72,7 @@ function Home({ history }) {
                 <h1>{wInfo.name}</h1>
                 <h2>{wInfo.main.temp + 'F'} </h2>
             </>}
+            <Toaster />
         </>
     )
 }
