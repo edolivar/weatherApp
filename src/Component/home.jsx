@@ -56,6 +56,7 @@ function Home({ history }) {
 
             {!wInfo ? <>
                 <button onClick={() => { tempFunc(setwInfo, setErr) }}>Use Location Services!</button>
+                <>OR</>
                 < div > Weather In Your Zip Code!</div >
                 <form action=""></form>
                 <input type="text" value={zipCode} onChange={(event) => {
